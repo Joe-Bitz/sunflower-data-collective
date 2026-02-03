@@ -34,10 +34,13 @@ GOLDEN_ANGLE = np.deg2rad(137.5)
 
 i = np.arange(points)
 r = np.sqrt(i)
+r = r / r.max() * 10   # ← normalize to fixed max radius
+
 theta = i * GOLDEN_ANGLE
 
 x = r * np.cos(theta)
 y = r * np.sin(theta)
+
 
 # ---------- Plot ----------
 
@@ -45,6 +48,9 @@ fig, ax = plt.subplots(figsize=(7, 7))
 ax.scatter(x, y, s=size, c="#f4b400")  # sunflower gold
 ax.set_aspect("equal")
 ax.axis("off")
+ax.set_xlim(-11, 11)
+ax.set_ylim(-11, 11)
+
 
 st.pyplot(fig)
 
