@@ -1,4 +1,4 @@
-import streamlit as st
+﻿import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -41,10 +41,10 @@ y = r * np.sin(theta)
 
 # ---------- Plot ----------
 
-fig, ax = plt.subplots(figsize=(7,7))
+fig, ax = plt.subplots(figsize=(7, 7))
 ax.scatter(x, y, s=size, c="#f4b400")  # sunflower gold
-ax.set_aspect('equal')
-ax.axis('off')
+ax.set_aspect("equal")
+ax.axis("off")
 
 st.pyplot(fig)
 
@@ -57,10 +57,10 @@ st.header("📊 What This Means for Data Systems")
 st.markdown("""
 Each new point represents new data entering a system:
 
-✅ It adds value  
-✅ It does not overwrite prior structure  
-✅ It fits cleanly into the model  
-✅ Growth stays stable  
+- It adds value
+- It does not overwrite prior structure
+- It fits cleanly into the model
+- Growth stays stable
 
 **If growth causes collisions — the structure is wrong.**
 """)
