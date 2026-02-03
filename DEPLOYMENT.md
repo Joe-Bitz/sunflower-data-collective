@@ -34,6 +34,10 @@ For contact form email, configure these on your host:
 - `MAIL_PASSWORD`
 - `MAIL_TO`
 
+Recommended:
+- `SECRET_KEY` for stable CSRF protection.
+- `DEMO_URL` to point the embedded demo to your hosted Streamlit URL.
+
 ## Production Notes
 - Set `debug=False` in production.
 - Use HTTPS.

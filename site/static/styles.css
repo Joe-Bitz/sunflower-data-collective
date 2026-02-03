@@ -256,11 +256,6 @@ button:hover{
   margin: 0;
 }
 
-.demo-page .iframe-wrap{
-  height: calc(100vh - 140px);
-}
-
-
 .iframe-wrap iframe{
   width: 100%;
   height: 100%;

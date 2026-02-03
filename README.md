@@ -27,6 +27,11 @@ For email on the contact form, create `site/.env` with:
 - `MAIL_PASSWORD`
 - `MAIL_TO`
 
+Optional:
+- `DEMO_URL` to point the site demo page to a hosted Streamlit app.
+- `SECRET_KEY` to keep contact form CSRF tokens stable across restarts.
+
 ## Notes
 - `.env` is ignored in git.
-- The demo link points to `http://localhost:8501` by default.
+- The demo link points to `http://localhost:8501` by default unless `DEMO_URL` is set.
+- The root `requirements.txt` is for the Streamlit demo deployment only.

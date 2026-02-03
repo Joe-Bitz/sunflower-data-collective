@@ -15,6 +15,7 @@
 {% endif %}
 
 <form class="form" method="post" action="{{ url_for('contact') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
   <label for="contact-name">
     Name
     <input

@@ -1,12 +1,21 @@
 import os
+import secrets
 import smtplib
 from email.message import EmailMessage
 
 from dotenv import load_dotenv
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 
 app = Flask(__name__)
 load_dotenv()
+app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(32))
+
+DEMO_URL = os.getenv("DEMO_URL", "http://localhost:8501")
+
+def _ensure_csrf_token():
+    if "csrf_token" not in session:
+        session["csrf_token"] = secrets.token_urlsafe(32)
+    return session["csrf_token"]
 
 @app.route("/")
 def home():
@@ -18,7 +27,7 @@ def services():
 
 @app.route("/thinking")
 def thinking():
-    return render_template("thinking.html")
+    return render_template("thinking.html", demo_url=DEMO_URL)
 
 @app.route("/about")
 def about():
@@ -27,13 +36,14 @@ def about():
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "GET":
-        return render_template("contact.html")
+        return render_template("contact.html", csrf_token=_ensure_csrf_token())
 
     # --- Read form fields ---
     name = (request.form.get("name") or "").strip()
     email = (request.form.get("email") or "").strip()
     company = (request.form.get("company") or "").strip()
     message = (request.form.get("message") or "").strip()
+    csrf_token = request.form.get("csrf_token")
     form_data = {
         "name": name,
         "email": email,
@@ -42,11 +52,19 @@ def contact():
     }
 
     # --- Basic validation ---
+    if not csrf_token or csrf_token != session.get("csrf_token"):
+        return render_template(
+            "contact.html",
+            error="Your session expired. Please refresh and try again.",
+            form_data=form_data,
+            csrf_token=_ensure_csrf_token(),
+        )
     if not name or not email or not message:
         return render_template(
             "contact.html",
             error="Please fill out name, email, and message.",
             form_data=form_data,
+            csrf_token=_ensure_csrf_token(),
         )
 
     # --- Email config from .env ---
@@ -63,6 +81,7 @@ def contact():
             "contact.html",
             error="Email is not configured on the server yet.",
             form_data=form_data,
+            csrf_token=_ensure_csrf_token(),
         )
 
     try:
@@ -91,20 +110,22 @@ Message:
             smtp.login(mail_username, mail_password)
             smtp.send_message(msg)
 
-        return render_template("contact.html", success=True)
+        session.pop("csrf_token", None)
+        return render_template("contact.html", success=True, csrf_token=_ensure_csrf_token())
 
     except Exception as e:
-        print(f"Contact form error: {e}")
+        app.logger.exception("Contact form error")
         return render_template(
             "contact.html",
             error="Could not send your message right now. Please try again.",
             form_data=form_data,
+            csrf_token=_ensure_csrf_token(),
         )
 
 
 @app.route("/demo")
 def demo():
-    return render_template("demo.html")
+    return render_template("demo.html", demo_url=DEMO_URL)
 
 
 if __name__ == "__main__":
