@@ -104,7 +104,7 @@ Message:
         msg.set_content(body)
 
         # --- Send ---
-        with smtplib.SMTP(mail_server, mail_port) as smtp:
+        with smtplib.SMTP(mail_server, mail_port, timeout=10) as smtp:
             if mail_use_tls:
                 smtp.starttls()
             smtp.login(mail_username, mail_password)
