@@ -1,0 +1,64 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<h1>Contact</h1>
+
+<p>Tell us where growth is causing friction:</p>
+
+{% if success %}
+  <div class="alert success" role="status">
+    Thanks! We'll get back to you soon.
+  </div>
+{% endif %}
+
+{% if error %}
+  <div class="alert error" role="alert">{{ error }}</div>
+{% endif %}
+
+<form class="form" method="post" action="{{ url_for('contact') }}">
+  <label for="contact-name">
+    Name
+    <input
+      id="contact-name"
+      name="name"
+      type="text"
+      autocomplete="name"
+      required
+      value="{{ form_data.name if form_data else '' }}"
+    />
+  </label>
+
+  <label for="contact-email">
+    Email
+    <input
+      id="contact-email"
+      name="email"
+      type="email"
+      autocomplete="email"
+      required
+      value="{{ form_data.email if form_data else '' }}"
+    />
+  </label>
+
+  <label for="contact-company">
+    Company
+    <input
+      id="contact-company"
+      name="company"
+      type="text"
+      autocomplete="organization"
+      value="{{ form_data.company if form_data else '' }}"
+    />
+  </label>
+
+  <label for="contact-message">
+    How can we help?
+    <textarea
+      id="contact-message"
+      name="message"
+      required
+    >{{ form_data.message if form_data else '' }}</textarea>
+  </label>
+
+  <button type="submit">Send</button>
+</form>
+{% endblock %}

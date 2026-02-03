@@ -1,0 +1,19 @@
+A — Connect demo inside your Flask site (embedded iframe)
+
+Feels seamless
+
+B — Add real logo + branding into Flask site
+
+Make homepage match your logo
+
+C — Add real contact form → sends email
+
+Lead capture
+
+D — Deploy both apps live
+
+Real domain
+
+E — Add “data layer spiral” demo (rings = raw → clean → model → metrics)
+
+Say the letter — we build it next 🌻
