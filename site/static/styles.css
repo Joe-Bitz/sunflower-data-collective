@@ -88,7 +88,9 @@ body{
 .brand-tagline{
   color:var(--muted);
   font-size:0.95rem;
-}.nav{
+}
+
+.nav{
   display:flex;
   gap:1rem;
   flex-wrap:wrap;
@@ -274,3 +276,81 @@ button:hover{
   color: #fff;
 }
 
+
+
+/* ---------- Mobile nav (details/summary) ---------- */
+
+.nav-toggle {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  font-weight: 800;
+}
+
+.nav-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.nav-links {
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+
+/* keep your link styles applying inside */
+.nav-links a {
+  display: block;
+}
+
+/* ---------- Responsive nav ---------- */
+.nav-desktop { 
+  display: flex; 
+  gap: 1rem; 
+  flex-wrap: wrap; 
+}
+
+.nav-mobile { 
+  display: none; 
+}
+
+.nav-toggle {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  font-weight: 800;
+}
+
+.nav-toggle::-webkit-details-marker { display: none; }
+
+.nav-links {
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.nav-links a { display: block; }
+
+@media (max-width: 720px) {
+  .site-header { align-items: flex-start; }
+  .nav-desktop { display: none; }
+  .nav-mobile { display: block; }
+  .container { padding: 1.25rem; }
+}

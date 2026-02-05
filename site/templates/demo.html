@@ -1,14 +1,19 @@
 ﻿{% extends "base.html" %}
 {% block content %}
+<section class="hero">
+  <h1>Demo</h1>
+  <p class="lead">Open the interactive demo in a new tab.</p>
 
-<section class="demo-page">
-  <div class="iframe-wrap">
-    <iframe
-      src="{{ demo_url }}"
-      title="Sunflower Growth Demo"
-      loading="lazy"
-    ></iframe>
-  </div>
+  {% if demo_url %}
+    <a class="button" href="{{ demo_url }}" target="_blank" rel="noopener noreferrer">
+      Open Demo
+    </a>
+  {% else %}
+    <div class="alert error" role="alert">
+      Demo link isn’t configured yet.
+    </div>
+  {% endif %}
+
+  <a class="button secondary" href="{{ url_for('contact') }}">Talk to us</a>
 </section>
-
 {% endblock %}

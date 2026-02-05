@@ -12,7 +12,7 @@ app = Flask(__name__)
 load_dotenv()
 
 app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(32))
-DEMO_URL = os.getenv("DEMO_URL", "http://localhost:8501")
+DEMO_URL = os.getenv("DEMO_URL", "")
 
 
 def _ensure_csrf_token():

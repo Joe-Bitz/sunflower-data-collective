@@ -24,26 +24,30 @@
         </div>
     </div>
 
-    <nav class="nav">
-  <a class="{% if request.endpoint == 'home' %}active{% endif %}"
-     href="{{ url_for('home') }}">Home</a>
+    <nav class="nav" aria-label="Primary">
+  <!-- Desktop links -->
+  <div class="nav-desktop">
+    <a class="{% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
+    <a class="{% if request.endpoint == 'services' %}active{% endif %}" href="{{ url_for('services') }}">What We Do</a>
+    <a class="{% if request.endpoint == 'thinking' %}active{% endif %}" href="{{ url_for('thinking') }}">How We Think</a>
+    <a class="{% if request.endpoint == 'demo' %}active{% endif %}" href="{{ url_for('demo') }}">Demo</a>
+    <a class="{% if request.endpoint == 'about' %}active{% endif %}" href="{{ url_for('about') }}">About</a>
+    <a class="{% if request.endpoint == 'contact' %}active{% endif %}" href="{{ url_for('contact') }}">Contact</a>
+  </div>
 
-  <a class="{% if request.endpoint == 'services' %}active{% endif %}"
-     href="{{ url_for('services') }}">What We Do</a>
-
-  <a class="{% if request.endpoint == 'thinking' %}active{% endif %}"
-     href="{{ url_for('thinking') }}">How We Think</a>
-
-  <a class="{% if request.endpoint == 'demo' %}active{% endif %}"
-     href="{{ url_for('demo') }}">Demo</a>
-
-  <a class="{% if request.endpoint == 'about' %}active{% endif %}"
-     href="{{ url_for('about') }}">About</a>
-
-  <a class="{% if request.endpoint == 'contact' %}active{% endif %}"
-     href="{{ url_for('contact') }}">Contact</a>
+<!-- Mobile menu -->
+  <details class="nav-mobile">
+    <summary class="nav-toggle">Menu</summary>
+    <div class="nav-links">
+      <a class="{% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
+      <a class="{% if request.endpoint == 'services' %}active{% endif %}" href="{{ url_for('services') }}">What We Do</a>
+      <a class="{% if request.endpoint == 'thinking' %}active{% endif %}" href="{{ url_for('thinking') }}">How We Think</a>
+      <a class="{% if request.endpoint == 'demo' %}active{% endif %}" href="{{ url_for('demo') }}">Demo</a>
+      <a class="{% if request.endpoint == 'about' %}active{% endif %}" href="{{ url_for('about') }}">About</a>
+      <a class="{% if request.endpoint == 'contact' %}active{% endif %}" href="{{ url_for('contact') }}">Contact</a>
+    </div>
+  </details>
 </nav>
-
 </header>
 
 <main class="container" id="main-content">
