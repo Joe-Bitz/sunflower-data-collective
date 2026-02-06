@@ -4,7 +4,15 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r site/requirements.txt
-    startCommand: gunicorn -w 2 -b 0.0.0.0:$PORT site.app:app
+    startCommand: gunicorn -w 2 -b 0.0.0.0:$PORT --chdir site app:app
     envVars:
+      - key: SECRET_KEY
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      - key: MAIL_TO
+        sync: false
       - key: DEMO_URL
         value: https://sunflower-data-collective.streamlit.app/

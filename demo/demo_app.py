@@ -1,22 +1,47 @@
-﻿import streamlit as st
+﻿import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.pyplot as plt
+import streamlit as st
 
-st.set_page_config(
-    page_title="Sunflower Data Collective — Growth Demo",
-    layout="centered"
-)
+GOLDEN_ANGLE_DEGREES = 137.5
+MAX_RADIUS = 10
+PLOT_LIMIT = 11
+
+
+def compute_spiral_points(points: int):
+    golden_angle = np.deg2rad(GOLDEN_ANGLE_DEGREES)
+    indices = np.arange(points)
+    radius = np.sqrt(indices)
+    radius = radius / radius.max() * MAX_RADIUS
+    theta = indices * golden_angle
+    x = radius * np.cos(theta)
+    y = radius * np.sin(theta)
+    return x, y
+
+
+def build_plot(x, y, size: int):
+    fig, ax = plt.subplots(figsize=(7, 7))
+    ax.scatter(x, y, s=size, c="#f4b400")  # sunflower gold
+    ax.set_aspect("equal")
+    ax.axis("off")
+    ax.set_xlim(-PLOT_LIMIT, PLOT_LIMIT)
+    ax.set_ylim(-PLOT_LIMIT, PLOT_LIMIT)
+    return fig
+
+
+st.set_page_config(page_title="Sunflower Data Collective — Growth Demo", layout="centered")
 
 # ---------- Header ----------
 
 st.title("🌻 Sunflower Data Collective — Growth Pattern Demo")
 
-st.markdown("""
+st.markdown(
+    """
 **Nature scales with structure. Your data should too.**
 
 Sunflowers use the **golden angle (137.5°)** to grow without overlap.
 We use the same principle when designing scalable data systems.
-""")
+"""
+)
 
 # ---------- Controls ----------
 
@@ -30,29 +55,13 @@ with col2:
 
 # ---------- Spiral Math ----------
 
-GOLDEN_ANGLE = np.deg2rad(137.5)
-
-i = np.arange(points)
-r = np.sqrt(i)
-r = r / r.max() * 10   # ← normalize to fixed max radius
-
-theta = i * GOLDEN_ANGLE
-
-x = r * np.cos(theta)
-y = r * np.sin(theta)
-
+x, y = compute_spiral_points(points)
 
 # ---------- Plot ----------
 
-fig, ax = plt.subplots(figsize=(7, 7))
-ax.scatter(x, y, s=size, c="#f4b400")  # sunflower gold
-ax.set_aspect("equal")
-ax.axis("off")
-ax.set_xlim(-11, 11)
-ax.set_ylim(-11, 11)
-
-
+fig = build_plot(x, y, size)
 st.pyplot(fig)
+plt.close(fig)
 
 # ---------- Business Translation ----------
 
@@ -60,7 +69,8 @@ st.markdown("---")
 
 st.header("📊 What This Means for Data Systems")
 
-st.markdown("""
+st.markdown(
+    """
 Each new point represents new data entering a system:
 
 - It adds value
@@ -69,6 +79,7 @@ Each new point represents new data entering a system:
 - Growth stays stable
 
 **If growth causes collisions — the structure is wrong.**
-""")
+"""
+)
 
 st.info("This is the Sunflower Principle: structured growth beats reactive redesign.")

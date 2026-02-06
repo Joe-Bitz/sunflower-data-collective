@@ -13,7 +13,7 @@ You can deploy them together behind a reverse proxy or separately on different s
    - `pip install -r demo/requirements.txt`
 3. Run the Flask app with a production server (example using Gunicorn):
    - `pip install gunicorn`
-   - `gunicorn -w 2 -b 127.0.0.1:5000 site.app:app`
+   - `gunicorn -w 2 -b 127.0.0.1:5000 --chdir site app:app`
 4. Run the Streamlit demo on localhost:
    - `streamlit run demo/demo_app.py --server.port 8501 --server.address 127.0.0.1`
 5. Use Nginx to proxy:

@@ -31,7 +31,7 @@ app.secret_key = _get_secret_key()
 DEMO_URL = os.getenv("DEMO_URL", "")
 
 
-def _ensure_csrf_token():
+def _ensure_csrf_token() -> str:
     if "csrf_token" not in session:
         session["csrf_token"] = secrets.token_urlsafe(32)
     return session["csrf_token"]
@@ -49,7 +49,7 @@ def _send_contact_email_sendgrid(name: str, email: str, company: str, message_te
     mail_to = os.getenv("MAIL_TO")
     mail_from = os.getenv("MAIL_FROM")
 
-    if not all([api_key, mail_to, mail_from]):
+    if not all((api_key, mail_to, mail_from)):
         raise RuntimeError("SendGrid email environment variables not configured")
 
     subject = f"New contact form: {name}"
@@ -66,7 +66,7 @@ Message:
 
     mail = Mail(
         from_email=mail_from,          # must be verified in SendGrid
-        to_emails=mail_to,             # where you receive it (josephbitz@gmail.com)
+        to_emails=mail_to,
         subject=subject,
         plain_text_content=body,
     )
@@ -80,7 +80,7 @@ Message:
     return resp.status_code
 
 
-def _get_contact_form_data():
+def _get_contact_form_data() -> tuple[dict[str, str], str | None]:
     form_data = {
         "name": (request.form.get("name") or "").strip(),
         "email": (request.form.get("email") or "").strip(),
