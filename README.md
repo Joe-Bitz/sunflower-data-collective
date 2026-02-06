@@ -20,11 +20,8 @@ The site runs at `http://localhost:5000`. The demo (Streamlit) runs at `http://l
 
 ## Configuration
 For email on the contact form, create `site/.env` with:
-- `MAIL_SERVER`
-- `MAIL_PORT`
-- `MAIL_USE_TLS`
-- `MAIL_USERNAME`
-- `MAIL_PASSWORD`
+- `SENDGRID_API_KEY`
+- `MAIL_FROM` (must be a verified sender in SendGrid)
 - `MAIL_TO`
 
 Optional:

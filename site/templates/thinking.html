@@ -2,11 +2,15 @@
 {% block content %}
 <h1>How We Think</h1>
 
-<p>
-  <a class="button" href="{{ demo_url }}" target="_blank" rel="noopener noreferrer">
-    Try the Interactive Growth Demo
-  </a>
-</p>
+{% if demo_url %}
+  <p>
+    <a class="button" href="{{ demo_url }}" target="_blank" rel="noopener noreferrer">
+      Try the Interactive Growth Demo
+    </a>
+  </p>
+{% else %}
+  <div class="alert error" role="alert">Demo link isn’t configured yet.</div>
+{% endif %}
 
 <p>
   Sunflowers grow using the Fibonacci sequence and the golden angle (137.5°),

@@ -27,11 +27,8 @@ You can deploy them together behind a reverse proxy or separately on different s
 
 ## Environment Variables
 For contact form email, configure these on your host:
-- `MAIL_SERVER`
-- `MAIL_PORT`
-- `MAIL_USE_TLS`
-- `MAIL_USERNAME`
-- `MAIL_PASSWORD`
+- `SENDGRID_API_KEY`
+- `MAIL_FROM` (must be a verified sender in SendGrid)
 - `MAIL_TO`
 
 Recommended:
