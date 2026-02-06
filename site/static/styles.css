@@ -63,13 +63,14 @@ body{
 }
 
 .brand-name{
-  letter-spacing: 0.2px;
+  letter-spacing:0.2px;
+  font-weight:800;
 }
 
 .brand-tagline{
-  color: var(--muted);
+  color:var(--muted);
+  font-size:0.95rem;
 }
-
 
 .brand{
   display:flex;
@@ -79,15 +80,6 @@ body{
 
 .mark{
   font-size:1.5rem;
-}
-
-.brand-name{
-  font-weight:800;
-}
-
-.brand-tagline{
-  color:var(--muted);
-  font-size:0.95rem;
 }
 
 .nav{
@@ -115,7 +107,7 @@ body{
 .nav a.active{
   color: var(--green);
   background: rgba(47,107,63,0.14);
-  box-shadow: inset 0 -2px 0 var(--gold); /* nice subtle “tab” underline */
+  box-shadow: inset 0 -2px 0 var(--gold); /* nice subtle tab underline */
 }
 
 .nav a:focus-visible{
@@ -275,43 +267,6 @@ button:hover{
   background: var(--green);
   color: #fff;
 }
-
-
-
-/* ---------- Mobile nav (details/summary) ---------- */
-
-.nav-toggle {
-  list-style: none;
-  cursor: pointer;
-  user-select: none;
-
-  padding: 8px 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #fff;
-  font-weight: 800;
-}
-
-.nav-toggle::-webkit-details-marker {
-  display: none;
-}
-
-.nav-links {
-  margin-top: 10px;
-  display: grid;
-  gap: 6px;
-
-  padding: 10px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-}
-
-/* keep your link styles applying inside */
-.nav-links a {
-  display: block;
-}
-
 /* ---------- Responsive nav ---------- */
 .nav-desktop { 
   display: flex; 

@@ -4,6 +4,7 @@ import secrets
 from flask import Flask, render_template, request, session
 from dotenv import load_dotenv
 
+from python_http_client.exceptions import HTTPError
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
@@ -11,7 +12,22 @@ from sendgrid.helpers.mail import Mail
 app = Flask(__name__)
 load_dotenv()
 
-app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(32))
+
+def _get_secret_key() -> str:
+    secret_key = os.getenv("SECRET_KEY")
+    if secret_key:
+        return secret_key
+
+    flask_env = (os.getenv("FLASK_ENV") or "").lower()
+    flask_debug = (os.getenv("FLASK_DEBUG") or "").strip() == "1"
+    is_local_run = __name__ == "__main__"
+    if flask_env in {"development", "dev", "local"} or flask_debug or is_local_run:
+        return secrets.token_hex(32)
+
+    raise RuntimeError("SECRET_KEY must be set outside local development")
+
+
+app.secret_key = _get_secret_key()
 DEMO_URL = os.getenv("DEMO_URL", "")
 
 
@@ -59,7 +75,40 @@ Message:
 
     sg = SendGridAPIClient(api_key)
     resp = sg.send(mail)
+    if not 200 <= resp.status_code < 300:
+        raise RuntimeError(f"SendGrid returned non-success status: {resp.status_code}")
     return resp.status_code
+
+
+def _get_contact_form_data():
+    form_data = {
+        "name": (request.form.get("name") or "").strip(),
+        "email": (request.form.get("email") or "").strip(),
+        "company": (request.form.get("company") or "").strip(),
+        "message": (request.form.get("message") or "").strip(),
+    }
+    csrf_token = request.form.get("csrf_token")
+    return form_data, csrf_token
+
+
+def _validate_contact_form(form_data: dict[str, str], csrf_token: str | None) -> str | None:
+    if not csrf_token or csrf_token != session.get("csrf_token"):
+        return "Your session expired. Please refresh and try again."
+
+    if not form_data["name"] or not form_data["email"] or not form_data["message"]:
+        return "Please fill out name, email, and message."
+
+    return None
+
+
+def _render_contact(*, error: str | None = None, success: bool = False, form_data: dict[str, str] | None = None):
+    return render_template(
+        "contact.html",
+        error=error,
+        success=success,
+        form_data=form_data,
+        csrf_token=_ensure_csrf_token(),
+    )
 
 
 @app.route("/")
@@ -90,52 +139,29 @@ def demo():
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "GET":
-        return render_template("contact.html", csrf_token=_ensure_csrf_token())
+        return _render_contact()
 
-    # --- Read form fields ---
-    name = (request.form.get("name") or "").strip()
-    email = (request.form.get("email") or "").strip()
-    company = (request.form.get("company") or "").strip()
-    message_text = (request.form.get("message") or "").strip()
-    csrf_token = request.form.get("csrf_token")
-
-    form_data = {
-        "name": name,
-        "email": email,
-        "company": company,
-        "message": message_text,
-    }
-
-    # --- Basic validation ---
-    if not csrf_token or csrf_token != session.get("csrf_token"):
-        return render_template(
-            "contact.html",
-            error="Your session expired. Please refresh and try again.",
-            form_data=form_data,
-            csrf_token=_ensure_csrf_token(),
-        )
-
-    if not name or not email or not message_text:
-        return render_template(
-            "contact.html",
-            error="Please fill out name, email, and message.",
-            form_data=form_data,
-            csrf_token=_ensure_csrf_token(),
-        )
+    form_data, csrf_token = _get_contact_form_data()
+    validation_error = _validate_contact_form(form_data, csrf_token)
+    if validation_error:
+        return _render_contact(error=validation_error, form_data=form_data)
 
     try:
-        _send_contact_email_sendgrid(name, email, company, message_text)
+        _send_contact_email_sendgrid(
+            form_data["name"],
+            form_data["email"],
+            form_data["company"],
+            form_data["message"],
+        )
 
         session.pop("csrf_token", None)
-        return render_template("contact.html", success=True, csrf_token=_ensure_csrf_token())
+        return _render_contact(success=True)
 
-    except Exception:
+    except (RuntimeError, HTTPError):
         app.logger.exception("Contact form error")
-        return render_template(
-            "contact.html",
+        return _render_contact(
             error="Could not send your message right now. Please try again.",
             form_data=form_data,
-            csrf_token=_ensure_csrf_token(),
         )
 
 
